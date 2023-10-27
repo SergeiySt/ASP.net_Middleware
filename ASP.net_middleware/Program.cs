@@ -5,20 +5,19 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+app.Use(async (context, next) =>
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+    context.Response.Headers.Add("CUSTOM-HEADER", "CUSTOM VALUE");
+    await next();
+});
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
+app.Map("/", async (context) => {
+    string text = "";
+    foreach (var t in context.Response.Headers)
+        text += $"{t}\n";
+    await context.Response.WriteAsync(text);
+    //context.Response.Headers.Add("CUSTOM-HEADER", "CUSTOM VALUE");
+});
 
 app.MapControllerRoute(
     name: "default",
