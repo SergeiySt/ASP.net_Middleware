@@ -10,18 +10,18 @@ var app = builder.Build();
 // Внедряем Middleware для подсчета запросов.
 app.UseRequestCounterMiddleware();
 
-//// Конфигурируем HTTP request pipeline.
-//if (!app.Environment.IsDevelopment())
-//{
-//    app.UseExceptionHandler("/Home/Error");
-//    app.UseHsts();
-//}
+// Конфигурируем HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
 
-//app.UseHttpsRedirection();
-//app.UseStaticFiles();
+app.UseHttpsRedirection();
+app.UseStaticFiles();
 
-//app.UseRouting();
-//app.UseAuthorization();
+app.UseRouting();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
